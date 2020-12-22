@@ -12,8 +12,8 @@ The function that deletes the smallest node should not be in the header file
 */
 
 /*
-cd ~/Documents/cpratybos/Uzduotis_nr_4
-clang main.c functions.c -o main
+2020-12-22
+If there are multiple values of the smallest values, then remove all of them, not only the first smallest value in the dll
 */
 
 
@@ -21,7 +21,7 @@ clang main.c functions.c -o main
 #include <stdlib.h>
 #include "tools.h"
 
-void delete_the_smallest_node(struct Node **list_head);
+void delete_the_smallest_node(struct Node **list_head, struct Node **list_tail);
 
 int main(){
     struct Node *list_head = NULL; // we inicialize the doubly linked list's head
@@ -49,7 +49,7 @@ int main(){
     print_list_from_behind(list_tail);
 
     printf("\nAfter removing the smallest element from the dll,");
-    delete_the_smallest_node(&list_head);
+    delete_the_smallest_node(&list_head, &list_tail);
     print_list(list_head);
 
     destroy_list(list_head);

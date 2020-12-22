@@ -37,7 +37,7 @@ void insert_at_the_beginning(struct Node **list_head, struct Node **list_tail, i
     if ((*list_tail) == NULL){ 
         (*list_head) = new_node; 
         (*list_tail) = new_node; 
-        (*list_head)->previous = NULL; 
+        (*list_head)->next = NULL; 
         return; 
     }
 
@@ -79,7 +79,7 @@ void print_list_from_behind(struct Node *node){
 }
 
 // Function that deletes the smallest node in the dll
-void delete_the_smallest_node(struct Node **list_head){
+void delete_the_smallest_node(struct Node **list_head, struct Node **list_tail){
     if (*list_head == NULL){
         return;
     }
@@ -113,11 +113,15 @@ void delete_the_smallest_node(struct Node **list_head){
         *list_head = del->next;
     }
 
+    // if we are deleting the tail node, then tail starts pointing to the previous node
+    if (*list_tail == del){
+        *list_tail = del->previous;
+    }
+
     // We have to change the next pointer only if we are not deleting the last node
     if (del->next != NULL){
         del->next->previous = del->previous;
     }
-    
  
     // We have to change the previous pointer only if we are not deleting the first node
     if (del->previous != NULL){
@@ -125,6 +129,31 @@ void delete_the_smallest_node(struct Node **list_head){
     }
  
     free(del);
+
+    struct Node *leftovers = *list_head;
+
+    while (leftovers != NULL){
+        if (min == leftovers->element){
+            if (*list_head == leftovers){
+                *list_head = leftovers->next;
+            }
+
+            if (*list_tail == del){
+                *list_tail = del->previous;
+            }
+
+            if (leftovers->next != NULL){
+                leftovers->next->previous = leftovers->previous;
+            }
+            
+            if (leftovers->previous != NULL){
+                leftovers->previous->next = leftovers->next;
+            }
+        
+            free(leftovers);
+        } 
+        leftovers = leftovers->next; 
+    }
 
     return;
 }
